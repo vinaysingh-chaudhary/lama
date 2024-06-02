@@ -1,5 +1,5 @@
 "use client"
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { ProjectModalContext } from '../../context/ProjectModalContext'
 import { useState } from 'react'
 import axios from 'axios'
@@ -9,9 +9,15 @@ const ProjectModal = () => {
     const router = useRouter(); 
     const {setProjectModalActive} = useContext(ProjectModalContext)
     const [projectName, setProjectName] = useState('')
+    const [userId, setUserId] = useState({}); 
+
+    useEffect(() => {
+        const userId = JSON.parse(window.localStorage.getItem("userInfo")); 
+        setUserId(userId); 
+    },[])
 
     const handleCreateProject = async() => {
-        const userId = await JSON.parse(window.localStorage.getItem("userInfo"))
+     
         try {
             console.log("triggered"); 
             const { data } = await axios.post("/api/project/create", {projectName: projectName, owner: userId._id}); 

@@ -1,11 +1,16 @@
 "use client"
 import axios from "axios";
 import { CreateProjectButton, ProjectCard } from "../../../components/index";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 const page =() => {
-    const userId = JSON.parse(window.localStorage.getItem("userInfo"))
+    const [userId, setUserId] = useState({}); 
     const [projects, setProjects] = useState([])
+
+  useEffect(() => {
+    const userId = JSON.parse(window.localStorage.getItem("userInfo"))
+    setUserId(useId); 
+  },[])
 
   useEffect(() => {
       const fetchProjects = async() => {
@@ -21,7 +26,11 @@ const page =() => {
           }
       }
 
-      fetchProjects();
+   const fetchTimeout =   setTimeout(() => {
+        fetchProjects();
+      }, 500);
+    
+      return () => clearTimeout(fetchTimeout);
   },[])
 
    console.log(userId._id)
